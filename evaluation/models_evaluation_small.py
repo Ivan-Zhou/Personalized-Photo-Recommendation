@@ -20,15 +20,6 @@ eval_models = {
             'sim_thresh': 0.26
         }
     },
-    'Item-Item NN with Item Attributes': {
-        'model': 'ItemSimWithInfo',
-        'parameters': {
-            'sim_method_r': 'cosine',
-            'sim_method_p': 'cosine',
-            'alpha': 0.1,
-            'sim_thresh': 0.31
-        }
-    },
     'HSV Embedding with Cosine NN': {
         'model': 'HSVNN',
         'parameters': {
@@ -36,24 +27,6 @@ eval_models = {
             'sim_method_p': 'cosine',
             'alpha': 0.01,
             'sim_thresh': 0.31
-        }
-    },
-    'RGB Embedding with Cosine NN': {
-        'model': 'RGBNN',
-        'parameters': {
-            'sim_method_r': 'cosine',
-            'sim_method_p': 'cosine',
-            'alpha': 0.04,
-            'sim_thresh': 0.31
-        }
-    },
-    'Style-embedded with Euclidean NN': {
-        'model': 'StyleNN',
-        'parameters': {
-            'sim_method_r': 'cosine',
-            'sim_method_p': 'euclidean',
-            'alpha': 0.2,
-            'sim_thresh': 0.26
         }
     },
 }
