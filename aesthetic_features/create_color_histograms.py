@@ -1,4 +1,6 @@
-from src.support_functions import *
+import argparse
+from data.load_data import *
+import cv2
 
 
 def create_color_histograms(images, output_save_path, color_space_name, n_bins=60):
@@ -30,28 +32,30 @@ def create_color_histograms(images, output_save_path, color_space_name, n_bins=6
     save_sparse_csr(output_save_path, csr_matrix(color_histograms))
 
 
-def main():
+def create_color_hist(args):
     os.chdir('../')
-    sample_name_list = ['sample_data_1', 'sample_data_2', 'sample_data_3', 'sample_data_4', 'sample_data_5']
-    """
-    samples = []
-    for sample_name in sample_name_list:
-        sample_data_path =  'data/' + sample_name + '/'
-        samples.append(SampleData(sample_data_path))
-    """
-    samples = load_samples(sample_name_list)
-
+    data_folder = args['data_folder']
+    sample_data_list = get_data(data_folder)
     n_bins = 60
     color_space_list = ['rgb', 'hls', 'hsv']
     for color_space_name in color_space_list:
         print()
         print('Color Space: ' + color_space_name)
-        for sample_data in samples:
+        for sample_data in sample_data_list:
             output_save_path = get_output_path(sample_data.sample_path, color_space_name, n_bins)
             if not os.path.exists(output_save_path):
                 images = sample_data.load_photo_contents()
                 create_color_histograms(images, output_save_path, color_space_name, n_bins)
 
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        '--data-folder',
+        help='Path to get data folder',
+        required=True
+    )
+
+    args = parser.parse_args()
+    create_color_hist(args.__dict__)

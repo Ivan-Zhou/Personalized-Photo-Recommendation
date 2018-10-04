@@ -1,8 +1,6 @@
 from sklearn.metrics.pairwise import pairwise_distances
-from src.support_functions import *
-from scipy import sparse
-from scipy.sparse import vstack
 from scipy.stats import pearsonr
+from evaluation.src.support_functions import *
 
 
 class RecSys(object):
@@ -103,7 +101,7 @@ class RecSys(object):
         prediction[interaction.nonzero()] = 0
         return prediction
 
-    def itemcf(self, sim_method, sim_thresh=0.1):
+    def itemcf(self, sim_method, sim_thresh=0.1, *arg):
         """
         Predict with the Item-based Collaborative Filtering
         """
@@ -116,7 +114,7 @@ class RecSys(object):
         prediction[matrix_train.nonzero()] = 0  # Remove the prediction on already rated items
         return prediction
 
-    def itembasedrec(self, sim_method_r, sim_method_p, alpha=0.1, sim_thresh=0.01):
+    def itembasedrec(self, sim_method_r, sim_method_p, alpha=0.1, sim_thresh=0.01, *arg):
         """
         Item-based Nearest Neighbour Method with Side Information of Items
         """
@@ -128,7 +126,7 @@ class RecSys(object):
                                              alpha, sim_thresh)
         return prediction
 
-    def hsvnn(self, sim_method_r, sim_method_p, alpha=0.01, sim_thresh=0.31):
+    def hsvnn(self, sim_method_r, sim_method_p, alpha=0.01, sim_thresh=0.31, *arg):
         self.sim_method_r = self._getSimMethod(sim_method_r)
         self.sim_method_p = self._getSimMethod(sim_method_p)
         matrix_train = self.data.matrix_train
@@ -137,7 +135,7 @@ class RecSys(object):
                                              alpha, sim_thresh)
         return prediction
 
-    def rgbnn(self, sim_method_r, sim_method_p, alpha=0.01, sim_thresh=0.31):
+    def rgbnn(self, sim_method_r, sim_method_p, alpha=0.01, sim_thresh=0.31, *arg):
         self.sim_method_r = self._getSimMethod(sim_method_r)
         self.sim_method_p = self._getSimMethod(sim_method_p)
         matrix_train = self.data.matrix_train
@@ -146,16 +144,16 @@ class RecSys(object):
                                                   alpha, sim_thresh)
         return prediction
 
-    def stylenn(self, sim_method_r, sim_method_p, alpha=0.01, sim_thresh=0.31):
+    def stylenn(self, sim_method_r, sim_method_p, alpha=0.01, sim_thresh=0.31, *arg):
         self.sim_method_r = self._getSimMethod(sim_method_r)
         self.sim_method_p = self._getSimMethod(sim_method_p)
         matrix_train = self.data.matrix_train
-        hsv_vectors = self.data.load_style_matrix()
-        prediction = self.cf_with_item_attributes(matrix_train, hsv_vectors, self.sim_method_r, self.sim_method_p,
+        style_vectors = self.data.load_style_matrix()
+        prediction = self.cf_with_item_attributes(matrix_train, style_vectors, self.sim_method_r, self.sim_method_p,
                                                   alpha, sim_thresh)
         return prediction
 
-    def itemAverage(self):
+    def itemAverage(self, *arg):
         matrix_train = self.data.matrix_train
         item_mean = np.mean(matrix_train, axis=0)[0]
         prediction = np.tile(item_mean, (matrix_train.shape[0], 1))
@@ -163,15 +161,15 @@ class RecSys(object):
         prediction = sparse.csr_matrix(prediction)
         return prediction
 
-    def randomrec(self):
+    def randomrec(self, *arg):
         matrix_train = self.data.matrix_train
         prediction = np.random.rand(matrix_train.shape[0], matrix_train.shape[1])
         prediction[matrix_train.nonzero()] = 0  # Remove the prediction on already rated items
         prediction = sparse.csr_matrix(prediction)
         return prediction
 
-    def predict_all(self, **kwargs):
-        self.__pred = self.model(**kwargs)
+    def predict_all(self, *arg):
+        self.__pred = self.model(*arg)
 
     def getPrediction(self):
         return self.__pred

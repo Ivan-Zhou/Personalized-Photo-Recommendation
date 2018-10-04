@@ -1,4 +1,5 @@
-from src.support_functions import *
+from evaluation.src.support_functions import *
+
 
 class Evaluation(object):
     def __init__(self, prediction, testSet, metric, k=10):
@@ -122,6 +123,12 @@ class result(object):
         self.metric = metric
         self.measurement = measurement
 
+    def print_result(self):
+        print('Model: ' + self.model_name + ', ' +
+              'Dataset: ' + str(self.dataset) + ', ' +
+              'Metric: ' + self.metric + ', ' +
+              'Measurement: ' + str(self.measurement))
+
 
 def save_results_in_df(results, df_name='', folder_path='results/'):
     """
@@ -154,7 +161,8 @@ def find_target_measurement(results, target_model_name, target_metric, target_da
           ', and dataset no.' + str(target_dataset))
 
 
-def save_evaluation_in_df(results, models, metrics, n_data, x_label='Model', results_name='', include_time=True, folder_path='results/'):
+def save_evaluation_in_df(results, models, metrics, n_data, x_label='Model', results_name='', include_time=True,
+                          folder_path='results/'):
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
 
